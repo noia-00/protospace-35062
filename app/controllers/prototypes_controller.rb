@@ -1,6 +1,7 @@
 class PrototypesController < ApplicationController
 
-  before_action :authenticate_user!, :shild, only: [:new, :edit, :destroy]
+  before_action :authenticate_user!, only: [:new, :edit, :destroy]
+  before_action :shild, only: :edit 
 
   def index
     @prototypes = Prototype.all
@@ -53,10 +54,9 @@ class PrototypesController < ApplicationController
   end
 
   def shild
-    @toukou = Prototype.find(params[:id])
-    unless @toukou.user == current_user
-      redirect_to root_path
-    end
+    @protousers = current_user.prototypes
+    @protouser = @protousers.find_by(id: params[:id])
+    redirect_to root_path unless @protouser
   end
 
 end
